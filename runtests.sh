@@ -20,4 +20,6 @@ do
 	fi
 done
 
+echo "Successfully completed all tests! Congrats! 🎉"
+
 exit 0
