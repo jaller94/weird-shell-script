@@ -1,15 +1,8 @@
 #!/bin/bash
 # Author: Christian Paul
 
-# Find all files in a given folder
-# Only process the first 3 files
-# Reduce relative files paths to their file names
-# Substring to the characters 3 to 6
-# Sort the file name parts ascending
-
- #Defaults to ./ dir
-
 listoldestfiles() {
+	# Default: current folder
 	DIR=${1:-./}
 	find "$DIR" -maxdepth 1 -type f -printf "%T+ %p\n" | \
 		sort | \
@@ -27,12 +20,18 @@ sortcharacters() {
 		tr -d "\n"
 }
 
+# Find all files in a given folder
+# Only process the first 3 files
 FILES="$(listoldestfiles "$1" | head -3)"
 
 while read -r FPATH; do
+	# Reduce relative files paths to their file names
 	FNAME="$(basename -- "$FPATH")"
-	FNAME3="${FNAME:3:3}"
+	# Substring to the characters 3 to 5 (3 letters)
+	FNAME3="${FNAME:2:3}"
+	# Sort the letters in the file name parts ascending
 	FNAME3SORTED="$(sortcharacters "$FNAME3")"
+	# Count the line numbers
 	LINES="$(wc -l "$FPATH" | cut -d' ' -f1)"
 	echo "$FNAME3SORTED   $LINES"
 done <<< "$FILES"
